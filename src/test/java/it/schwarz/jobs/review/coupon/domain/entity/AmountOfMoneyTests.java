@@ -3,6 +3,7 @@ package it.schwarz.jobs.review.coupon.domain.entity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,7 +16,7 @@ class AmountOfMoneyTests {
     }
 
     @Test
-    void testIsGreaterThan() {
+    void testIsGreaterThan() { // can make parameterized test case and reduce no of lines
         var amount = AmountOfMoney.of("1.23");
 
         assertTrue(amount.isGreaterThan(AmountOfMoney.of("1.22")));
@@ -52,4 +53,15 @@ class AmountOfMoneyTests {
                 () -> AmountOfMoney.of((String)null)
         );
     }
+
+    @Test
+    void ofStringWithEmptyStringShouldThrow() {
+        assertThatIllegalArgumentException().isThrownBy(() -> AmountOfMoney.of(""));
+    }
+
+    @Test
+    void ofStringWithNonNumericStringShouldThrow() {
+        assertThatIllegalArgumentException().isThrownBy(() -> AmountOfMoney.of("abc"));
+    }
+
 }
