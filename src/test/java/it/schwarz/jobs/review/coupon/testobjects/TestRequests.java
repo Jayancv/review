@@ -17,7 +17,7 @@ public class TestRequests {
     }
 
     public ApplyCouponRequestDto validApplication() {
-        return new ApplyCouponRequestDto(new BasketDto(new BigDecimal("60.00")), "TEST_05_50");
+        return new ApplyCouponRequestDto(new BasketDto(new BigDecimal("60.00")), "CODE_12_20");
     }
 
     public ApplyCouponRequestDto invalidApplicationOfNotExistingCode() {
@@ -25,6 +25,6 @@ public class TestRequests {
     }
 
     public ApplyCouponRequestDto invalidApplicationOfLowBasketValue() {
-        return new ApplyCouponRequestDto(new BasketDto(new BigDecimal("20.00")), "TEST_05_50");
+        return new ApplyCouponRequestDto(new BasketDto(new BigDecimal("15.00")), "CODE_12_20");
     }
 }

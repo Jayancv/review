@@ -72,7 +72,7 @@ public class InMemoryCouponProvider implements CouponProvider {
     @Override
     public void registerCouponApplication(String couponCode) {
         // Intentionally left blank, because it is currently not used
-//        applications.computeIfAbsent(couponCode, k -> new CopyOnWriteArrayList<>())
+//        couponApplications.computeIfAbsent(couponCode, k -> new CopyOnWriteArrayList<>())
 //            .add(Instant.now());
     }
 
