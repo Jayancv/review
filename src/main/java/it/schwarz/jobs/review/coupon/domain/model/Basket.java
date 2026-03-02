@@ -1,4 +1,4 @@
-package it.schwarz.jobs.review.coupon.domain.entity;
+package it.schwarz.jobs.review.coupon.domain.model;
 
 public class Basket {
     private final AmountOfMoney value;

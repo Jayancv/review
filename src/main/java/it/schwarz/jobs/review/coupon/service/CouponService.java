@@ -1,12 +1,12 @@
 package it.schwarz.jobs.review.coupon.service;
 
-import it.schwarz.jobs.review.coupon.domain.entity.ApplicationResult;
-import it.schwarz.jobs.review.coupon.domain.entity.Basket;
-import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
-import it.schwarz.jobs.review.coupon.domain.entity.CouponApplications;
-import it.schwarz.jobs.review.coupon.domain.usecase.exception.BasketValueTooLowException;
-import it.schwarz.jobs.review.coupon.domain.usecase.exception.CouponAlreadyExistsException;
-import it.schwarz.jobs.review.coupon.domain.usecase.exception.CouponCodeNotFoundException;
+import it.schwarz.jobs.review.coupon.domain.model.ApplicationResult;
+import it.schwarz.jobs.review.coupon.domain.model.Basket;
+import it.schwarz.jobs.review.coupon.domain.model.Coupon;
+import it.schwarz.jobs.review.coupon.domain.model.CouponApplications;
+import it.schwarz.jobs.review.coupon.domain.exception.BasketValueTooLowException;
+import it.schwarz.jobs.review.coupon.domain.exception.CouponAlreadyExistsException;
+import it.schwarz.jobs.review.coupon.domain.exception.CouponCodeNotFoundException;
 import it.schwarz.jobs.review.coupon.provider.CouponProvider;
 
 import java.util.List;

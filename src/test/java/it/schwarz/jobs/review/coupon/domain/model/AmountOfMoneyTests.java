@@ -1,4 +1,4 @@
-package it.schwarz.jobs.review.coupon.domain.entity;
+package it.schwarz.jobs.review.coupon.domain.model;
 
 import org.junit.jupiter.api.Test;
 

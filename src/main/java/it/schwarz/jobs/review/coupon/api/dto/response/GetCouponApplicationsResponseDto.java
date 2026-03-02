@@ -1,6 +1,6 @@
 package it.schwarz.jobs.review.coupon.api.dto.response;
 
-import it.schwarz.jobs.review.coupon.domain.entity.CouponApplications;
+import it.schwarz.jobs.review.coupon.domain.model.CouponApplications;
 
 import java.time.Instant;
 import java.util.List;

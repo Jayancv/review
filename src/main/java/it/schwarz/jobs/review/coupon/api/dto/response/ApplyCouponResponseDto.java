@@ -1,7 +1,7 @@
 package it.schwarz.jobs.review.coupon.api.dto.response;
 
 import it.schwarz.jobs.review.coupon.api.dto.common.BasketDto;
-import it.schwarz.jobs.review.coupon.domain.entity.ApplicationResult;
+import it.schwarz.jobs.review.coupon.domain.model.ApplicationResult;
 
 import java.math.BigDecimal;
 

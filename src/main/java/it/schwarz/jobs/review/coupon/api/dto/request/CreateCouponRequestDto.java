@@ -1,7 +1,7 @@
 package it.schwarz.jobs.review.coupon.api.dto.request;
 
-import it.schwarz.jobs.review.coupon.domain.entity.AmountOfMoney;
-import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
+import it.schwarz.jobs.review.coupon.domain.model.AmountOfMoney;
+import it.schwarz.jobs.review.coupon.domain.model.Coupon;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

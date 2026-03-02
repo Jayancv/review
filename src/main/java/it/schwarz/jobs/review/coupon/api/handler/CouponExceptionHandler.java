@@ -1,6 +1,6 @@
 package it.schwarz.jobs.review.coupon.api.handler;
 
-import it.schwarz.jobs.review.coupon.domain.usecase.exception.BusinessException;
+import it.schwarz.jobs.review.coupon.domain.exception.BusinessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;

@@ -1,7 +1,7 @@
 package it.schwarz.jobs.review.coupon.testobjects;
 
-import it.schwarz.jobs.review.coupon.domain.entity.AmountOfMoney;
-import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
+import it.schwarz.jobs.review.coupon.domain.model.AmountOfMoney;
+import it.schwarz.jobs.review.coupon.domain.model.Coupon;
 
 public class TestCoupons {
 

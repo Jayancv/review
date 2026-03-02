@@ -1,4 +1,4 @@
-package it.schwarz.jobs.review.coupon.provider.entity;
+package it.schwarz.jobs.review.coupon.provider.jpa.entity;
 
 
 import jakarta.persistence.*;

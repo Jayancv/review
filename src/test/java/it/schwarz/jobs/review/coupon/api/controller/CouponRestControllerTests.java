@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.schwarz.jobs.review.coupon.api.dto.request.ApplyCouponRequestDto;
 import it.schwarz.jobs.review.coupon.api.dto.request.CreateCouponRequestDto;
-import it.schwarz.jobs.review.coupon.domain.entity.AmountOfMoney;
-import it.schwarz.jobs.review.coupon.domain.entity.ApplicationResult;
-import it.schwarz.jobs.review.coupon.domain.entity.Basket;
-import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
-import it.schwarz.jobs.review.coupon.domain.usecase.exception.BasketValueTooLowException;
-import it.schwarz.jobs.review.coupon.domain.usecase.exception.CouponCodeNotFoundException;
+import it.schwarz.jobs.review.coupon.domain.model.AmountOfMoney;
+import it.schwarz.jobs.review.coupon.domain.model.ApplicationResult;
+import it.schwarz.jobs.review.coupon.domain.model.Basket;
+import it.schwarz.jobs.review.coupon.domain.model.Coupon;
+import it.schwarz.jobs.review.coupon.domain.exception.BasketValueTooLowException;
+import it.schwarz.jobs.review.coupon.domain.exception.CouponCodeNotFoundException;
 import it.schwarz.jobs.review.coupon.service.CouponService;
 import it.schwarz.jobs.review.coupon.testobjects.TestObjects;
 import org.junit.jupiter.api.Test;

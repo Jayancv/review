@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
-import it.schwarz.jobs.review.coupon.domain.entity.CouponApplications;
+import it.schwarz.jobs.review.coupon.domain.model.Coupon;
+import it.schwarz.jobs.review.coupon.domain.model.CouponApplications;
 import it.schwarz.jobs.review.coupon.testobjects.TestObjects;
 
 import static org.assertj.core.api.Assertions.assertThat;

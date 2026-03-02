@@ -1,8 +1,8 @@
 package it.schwarz.jobs.review.coupon.provider.inmem;
 
-import it.schwarz.jobs.review.coupon.domain.entity.AmountOfMoney;
-import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
-import it.schwarz.jobs.review.coupon.domain.entity.CouponApplications;
+import it.schwarz.jobs.review.coupon.domain.model.AmountOfMoney;
+import it.schwarz.jobs.review.coupon.domain.model.Coupon;
+import it.schwarz.jobs.review.coupon.domain.model.CouponApplications;
 import it.schwarz.jobs.review.coupon.provider.CouponProvider;
 
 import java.time.Instant;

@@ -3,7 +3,7 @@ package it.schwarz.jobs.review.coupon.testobjects;
 import java.time.Instant;
 import java.util.List;
 
-import it.schwarz.jobs.review.coupon.domain.entity.CouponApplications;
+import it.schwarz.jobs.review.coupon.domain.model.CouponApplications;
 
 public class TestApplications
 {

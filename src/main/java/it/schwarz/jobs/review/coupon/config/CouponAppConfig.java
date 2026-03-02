@@ -2,8 +2,8 @@ package it.schwarz.jobs.review.coupon.config;
 
 import it.schwarz.jobs.review.coupon.provider.CouponProvider;
 import it.schwarz.jobs.review.coupon.provider.inmem.InMemoryCouponProvider;
-import it.schwarz.jobs.review.coupon.provider.repository.ApplicationJpaRepository;
-import it.schwarz.jobs.review.coupon.provider.repository.CouponJpaRepository;
+import it.schwarz.jobs.review.coupon.provider.jpa.repository.ApplicationJpaRepository;
+import it.schwarz.jobs.review.coupon.provider.jpa.repository.CouponJpaRepository;
 import it.schwarz.jobs.review.coupon.provider.jpa.JpaCouponProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
