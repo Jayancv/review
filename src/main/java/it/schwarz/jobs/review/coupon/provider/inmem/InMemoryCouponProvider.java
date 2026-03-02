@@ -75,4 +75,11 @@ public class InMemoryCouponProvider implements CouponProvider {
         List<Instant> timestamps = couponApplications.getOrDefault(couponCode, List.of());
         return Optional.of(new CouponApplications(couponCode, timestamps));
     }
+
+    @Override
+    public void reset() {
+        coupons.clear();
+        couponApplications.clear();
+    }
+
 }

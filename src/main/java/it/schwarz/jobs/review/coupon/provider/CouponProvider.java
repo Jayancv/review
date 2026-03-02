@@ -16,4 +16,6 @@ public interface CouponProvider {
     void registerCouponApplication(String couponCode);
 
     Optional<CouponApplications> getCouponApplications(String couponCode);
+
+    void reset();
 }

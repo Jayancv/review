@@ -58,12 +58,15 @@ public class JpaCouponProvider implements CouponProvider {
 
     @Override
     public Optional<CouponApplications> getCouponApplications(String couponCode) {
-        var found = couponJpaRepository.findById(couponCode);  // Check do i need to check is found optional check
-        return found.map(couponJpaEntity -> new CouponApplications(
-                couponJpaEntity.getCode(),
-                couponJpaEntity.getApplications().stream()
-                        .map(ApplicationJpaEntity::getTimestamp)
-                        .toList()));
+        var found = couponJpaRepository.findById(couponCode);
+        return found.map(couponJpaEntity -> {
+            List<Instant> timestamps = Optional.ofNullable(applicationRepository.findByCouponCode(couponCode))
+                .orElse(List.of())
+                .stream()
+                .map(ApplicationJpaEntity::getTimestamp)
+                .toList();
+            return new CouponApplications(couponJpaEntity.getCode(), timestamps);
+        });
     }
 
     private CouponJpaEntity domainToJpa(Coupon coupon) {
@@ -86,4 +89,10 @@ public class JpaCouponProvider implements CouponProvider {
         );
     }
 
+    @Override
+    public void reset()
+    {
+        couponJpaRepository.deleteAll();
+        applicationRepository.deleteAll();
+    }
 }
