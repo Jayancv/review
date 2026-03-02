@@ -71,10 +71,10 @@ public class JpaCouponProvider implements CouponProvider {
 
     private CouponJpaEntity domainToJpa(Coupon coupon) {
         return new CouponJpaEntity(
-                coupon.getCode(),
-                coupon.getDiscount().toBigDecimal(),
-                coupon.getDescription(),
-                coupon.getMinBasketValue().toBigDecimal()
+            coupon.getCode(),
+            coupon.getDiscount().toBigDecimal(),
+            coupon.getMinBasketValue().toBigDecimal(),
+            coupon.getDescription()
         );
     }
 

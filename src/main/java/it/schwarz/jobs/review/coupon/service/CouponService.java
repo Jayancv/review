@@ -38,7 +38,7 @@ public class CouponService
 
     public CouponApplications getApplications(String couponCode) {
         var foundCouponApplications = couponProvider.getCouponApplications(couponCode);
-        if (foundCouponApplications.isEmpty()) {   // Need 2 exceptions Coupon code missing or no applications
+        if (foundCouponApplications.isEmpty()) {
             throw new CouponCodeNotFoundException("Coupon-Code " + couponCode + " not found.");
         }
         return foundCouponApplications.get();

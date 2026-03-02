@@ -7,11 +7,13 @@ import it.schwarz.jobs.review.coupon.provider.repository.CouponJpaRepository;
 import it.schwarz.jobs.review.coupon.provider.jpa.JpaCouponProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 public class CouponAppConfig {
 
     @Bean
+    @Profile("prd")
     public CouponProvider getJpaCouponProvider(
             CouponJpaRepository couponJpaRepository,
             ApplicationJpaRepository applicationRepository) {
@@ -19,7 +21,8 @@ public class CouponAppConfig {
     }
 
     // Comment in/out one of the CouponProvider Beans to select one for runtime
-    // @Bean
+     @Bean
+     @Profile("dev")
     public CouponProvider getInMemCouponProvider() {
         return new InMemoryCouponProvider();
     }

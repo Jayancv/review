@@ -18,7 +18,7 @@ public class CouponExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleBusinessExceptions(BusinessException ex, WebRequest request) {
         final var problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setDetail(ex.getMessage());
-
+        // Can add different HTTP status for different business errors
         return handleExceptionInternal(ex, problemDetail,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
@@ -27,7 +27,8 @@ public class CouponExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleAllOtherExceptions(Exception ex, WebRequest request) {
         final var problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problemDetail.setDetail(ex.getMessage());
-        // Log error and pass 'An internal error occurred. Please check the logs for more details or try again later.'
+        // TODO : Log error and pass 'An internal error occurred. Please check the logs for more details or try again
+        //  later.'
         return handleExceptionInternal(ex, problemDetail,
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }

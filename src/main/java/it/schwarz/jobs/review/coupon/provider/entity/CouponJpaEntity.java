@@ -25,11 +25,11 @@ public class CouponJpaEntity {
     public CouponJpaEntity() {
     }
 
-    public CouponJpaEntity(String code, BigDecimal discount, String description, BigDecimal minBasketValue) {
+    public CouponJpaEntity(String code, BigDecimal discount, BigDecimal minBasketValue, String description) {
         this.code = code;
         this.discount = discount;
-        this.description = description;
         this.minBasketValue = minBasketValue;
+        this.description = description;
     }
 
     public String getCode() {
