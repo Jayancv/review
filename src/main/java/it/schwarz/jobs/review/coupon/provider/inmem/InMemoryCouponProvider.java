@@ -52,7 +52,16 @@ public class InMemoryCouponProvider implements CouponProvider {
 
     @Override
     public List<Coupon> findAll() {
-        return List.copyOf(coupons.values());
+        return coupons.values().stream()
+            .map(c -> new Coupon(
+                c.getCode(),
+                c.getDiscount(),
+                c.getMinBasketValue(),
+                c.getDescription(),
+                couponApplications.getOrDefault(c.getCode(), List.of()).size()
+            ))
+            .toList();
+        // This needed to be done due to coupon apply method not implemented
     }
 
     @Override
