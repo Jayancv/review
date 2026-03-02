@@ -1,4 +1,4 @@
-package it.schwarz.jobs.review.coupon.domain.usecase;
+package it.schwarz.jobs.review.coupon.domain.usecase.exception;
 
 public class BasketValueTooLowException extends BusinessException {
     public BasketValueTooLowException(String detail) {

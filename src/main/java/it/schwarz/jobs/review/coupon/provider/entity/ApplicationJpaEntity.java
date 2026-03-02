@@ -1,4 +1,4 @@
-package it.schwarz.jobs.review.coupon.provider.jpa;
+package it.schwarz.jobs.review.coupon.provider.entity;
 
 
 import jakarta.persistence.*;
@@ -12,8 +12,9 @@ public class ApplicationJpaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private long id;
+    private Long id;
 
+    // Add one-to-many relation
     @Column(name = "COUPON_CODE", nullable = false)
     private String couponCode;
 

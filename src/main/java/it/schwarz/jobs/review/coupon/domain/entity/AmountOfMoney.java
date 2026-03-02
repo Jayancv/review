@@ -1,6 +1,7 @@
 package it.schwarz.jobs.review.coupon.domain.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class AmountOfMoney {
     public static final AmountOfMoney ZERO = new AmountOfMoney(BigDecimal.ZERO);
@@ -28,5 +29,21 @@ public class AmountOfMoney {
 
     public BigDecimal toBigDecimal() {
         return amount;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AmountOfMoney that = (AmountOfMoney) o;
+        return Objects.equals(amount, that.amount);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hashCode(amount);
     }
 }

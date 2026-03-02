@@ -1,5 +1,6 @@
-package it.schwarz.jobs.review.coupon.api.dto;
+package it.schwarz.jobs.review.coupon.api.dto.response;
 
+import it.schwarz.jobs.review.coupon.api.dto.common.CouponDto;
 import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
 
 import java.util.List;

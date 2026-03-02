@@ -1,4 +1,4 @@
-package it.schwarz.jobs.review.coupon.api.dto;
+package it.schwarz.jobs.review.coupon.api.dto.response;
 
 import it.schwarz.jobs.review.coupon.domain.entity.CouponApplications;
 

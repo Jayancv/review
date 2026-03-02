@@ -1,6 +1,6 @@
-package it.schwarz.jobs.review.coupon.api;
+package it.schwarz.jobs.review.coupon.api.handler;
 
-import it.schwarz.jobs.review.coupon.domain.usecase.BusinessException;
+import it.schwarz.jobs.review.coupon.domain.usecase.exception.BusinessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -27,7 +27,7 @@ public class CouponExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleAllOtherExceptions(Exception ex, WebRequest request) {
         final var problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problemDetail.setDetail(ex.getMessage());
-
+        // Log error and pass 'An internal error occurred. Please check the logs for more details or try again later.'
         return handleExceptionInternal(ex, problemDetail,
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }

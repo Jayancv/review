@@ -1,10 +1,9 @@
-package it.schwarz.jobs.review.coupon;
+package it.schwarz.jobs.review.coupon.config;
 
-import it.schwarz.jobs.review.coupon.domain.usecase.CouponProvider;
-import it.schwarz.jobs.review.coupon.domain.usecase.CouponUseCases;
+import it.schwarz.jobs.review.coupon.provider.CouponProvider;
 import it.schwarz.jobs.review.coupon.provider.inmem.InMemoryCouponProvider;
-import it.schwarz.jobs.review.coupon.provider.jpa.ApplicationJpaRepository;
-import it.schwarz.jobs.review.coupon.provider.jpa.CouponJpaRepository;
+import it.schwarz.jobs.review.coupon.provider.repository.ApplicationJpaRepository;
+import it.schwarz.jobs.review.coupon.provider.repository.CouponJpaRepository;
 import it.schwarz.jobs.review.coupon.provider.jpa.JpaCouponProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +24,11 @@ public class CouponAppConfig {
         return new InMemoryCouponProvider();
     }
 
-
-    @Bean
-    public CouponUseCases getCouponUseCases(CouponProvider couponProvider) {
-        return new CouponUseCases(couponProvider);
-    }
-
+//    removed by adding @service annotation
+//    @Bean
+//    public CouponService getCouponUseCases(CouponProvider couponProvider) {
+//        return new CouponService(couponProvider);
+//    }
+//
 
 }

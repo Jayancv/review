@@ -1,7 +1,12 @@
 package it.schwarz.jobs.review.coupon;
 
-import it.schwarz.jobs.review.coupon.api.*;
-import it.schwarz.jobs.review.coupon.api.dto.*;
+import it.schwarz.jobs.review.coupon.api.dto.ErrorResponseDto;
+import it.schwarz.jobs.review.coupon.api.dto.request.ApplyCouponRequestDto;
+import it.schwarz.jobs.review.coupon.api.dto.request.CreateCouponRequestDto;
+import it.schwarz.jobs.review.coupon.api.dto.response.ApplyCouponResponseDto;
+import it.schwarz.jobs.review.coupon.api.dto.response.CreateCouponResponseDto;
+import it.schwarz.jobs.review.coupon.api.dto.response.GetCouponApplicationsResponseDto;
+import it.schwarz.jobs.review.coupon.api.dto.response.GetCouponsResponseDto;
 import it.schwarz.jobs.review.coupon.testobjects.TestObjects;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CouponAppIT {
 
+
     @LocalServerPort
     private int port;
 
@@ -29,12 +35,23 @@ public class CouponAppIT {
     private TestRestTemplate restTemplate;
 
     private static final String BASE_URL = "http://localhost:";
+    private static final String API_BASE = "/api/v1/coupons";
+
+    private String url;
+//
+//    @BeforeEach
+//    void setUp() {
+//        url =BASE_URL + port + API_BASE;
+////        inMemoryCouponRepository.clear();
+//        TestDataFactory.loadSampleData(inMemoryCouponRepository);
+//    }
+
 
     @Test
     @Order(1)
     void testGetCouponOverview() {
         GetCouponsResponseDto response = this.restTemplate
-                .getForObject(BASE_URL + port + "/api/coupons", GetCouponsResponseDto.class);
+                .getForObject(BASE_URL + port + API_BASE, GetCouponsResponseDto.class);
 
         assertThat(response.coupons()).hasSize(3);
     }
@@ -44,13 +61,13 @@ public class CouponAppIT {
     void testCreateCoupon() {
         CreateCouponRequestDto request = TestObjects.requests().validCoupon();
         CreateCouponResponseDto response = this.restTemplate
-                .postForObject(BASE_URL + port + "/api/coupons", request, CreateCouponResponseDto.class);
+                .postForObject(BASE_URL + port + API_BASE, request, CreateCouponResponseDto.class);
 
         assertThat(response.coupon()).isNotNull();
         assertThat(response.coupon().code()).isEqualTo(TestObjects.requests().validCoupon().code());
 
         GetCouponsResponseDto overviewResponse = this.restTemplate
-                .getForObject(BASE_URL + port + "/api/coupons", GetCouponsResponseDto.class);
+                .getForObject(BASE_URL + port + API_BASE, GetCouponsResponseDto.class);
 
         assertThat(overviewResponse.coupons()).hasSize(4);
     }
@@ -61,7 +78,7 @@ public class CouponAppIT {
     void testCreateCouponDuplicate() {
         CreateCouponRequestDto request = TestObjects.requests().validCoupon();
         ResponseEntity<ErrorResponseDto> response = this.restTemplate
-                .postForEntity(BASE_URL + port + "/api/coupons", request, ErrorResponseDto.class);
+                .postForEntity(BASE_URL + port + API_BASE, request, ErrorResponseDto.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
@@ -73,7 +90,8 @@ public class CouponAppIT {
     void testCouponApplicationWithValidData() {
         ApplyCouponRequestDto request = TestObjects.requests().validApplication();
         ResponseEntity<ApplyCouponResponseDto> response = this.restTemplate
-                .postForEntity(BASE_URL + port + "/api/coupons/applications", request, ApplyCouponResponseDto.class);
+                .postForEntity(BASE_URL + port +API_BASE+ "/applications", request,
+                    ApplyCouponResponseDto.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
@@ -84,7 +102,7 @@ public class CouponAppIT {
     void testCouponApplicationWithInvalidData() {
         ApplyCouponRequestDto request = TestObjects.requests().invalidApplicationOfNotExistingCode();
         ResponseEntity<String> response = this.restTemplate
-                .postForEntity(BASE_URL + port + "/api/coupons/applications", request, String.class);
+                .postForEntity(BASE_URL + port + API_BASE+"/applications", request, String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
@@ -94,7 +112,7 @@ public class CouponAppIT {
     @Test
     void testGetCouponApplicationsWithValidCoupon() {
         ResponseEntity<GetCouponApplicationsResponseDto> response = this.restTemplate
-                .getForEntity(BASE_URL + port + "/api/coupons/TEST_05_50/applications", GetCouponApplicationsResponseDto.class);
+                .getForEntity(BASE_URL + port +  API_BASE+"/TEST_05_50/applications", GetCouponApplicationsResponseDto.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
@@ -106,7 +124,8 @@ public class CouponAppIT {
     void testGetCouponApplicationsWithInvalidCoupon() {
         String notExistingCouponCode = TestObjects.coupons().NOT_EXISTING_COUPON().getCode();
         ResponseEntity<GetCouponApplicationsResponseDto> response = this.restTemplate
-                .getForEntity(BASE_URL + port + "/api/coupons/" + notExistingCouponCode + "/applications", GetCouponApplicationsResponseDto.class);
+                .getForEntity(BASE_URL + port + API_BASE + notExistingCouponCode + "/applications",
+                    GetCouponApplicationsResponseDto.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }

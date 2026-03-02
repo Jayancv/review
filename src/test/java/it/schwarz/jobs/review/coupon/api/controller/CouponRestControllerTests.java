@@ -1,8 +1,8 @@
-package it.schwarz.jobs.review.coupon.api;
+package it.schwarz.jobs.review.coupon.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.schwarz.jobs.review.coupon.api.dto.CreateCouponRequestDto;
-import it.schwarz.jobs.review.coupon.domain.usecase.CouponUseCases;
+import it.schwarz.jobs.review.coupon.api.dto.request.CreateCouponRequestDto;
+import it.schwarz.jobs.review.coupon.service.CouponService;
 import it.schwarz.jobs.review.coupon.testobjects.TestObjects;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 class CouponRestControllerTests {
+    public static final String BASE_PATH = "/api/v1/coupons";
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,15 +34,15 @@ class CouponRestControllerTests {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private CouponUseCases couponUseCases;
+    private CouponService couponService;
 
 
     @Test
     void testGetCoupons() throws Exception {
-        when(couponUseCases.findAllCoupons()).thenReturn(new ArrayList<>());
+        when(couponService.findAllCoupons()).thenReturn(new ArrayList<>());
 
         this.mockMvc
-                .perform(get("/api/coupons"))
+                .perform(get(BASE_PATH))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("coupons")));
@@ -51,10 +52,10 @@ class CouponRestControllerTests {
     void testCreateValidCoupon() throws Exception {
 
         CreateCouponRequestDto request = TestObjects.requests().validCoupon();
-        when(couponUseCases.createCoupon(any())).thenReturn(TestObjects.coupons().COUPON_12_20());
+        when(couponService.createCoupon(any())).thenReturn(TestObjects.coupons().COUPON_12_20());
 
         this.mockMvc
-                .perform(post("/api/coupons")
+                .perform(post(BASE_PATH)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -70,7 +71,7 @@ class CouponRestControllerTests {
         CreateCouponRequestDto request = TestObjects.requests().invalidCouponOfNegativeDiscount();
 
         this.mockMvc
-                .perform(post("/api/coupons")
+                .perform(post(BASE_PATH)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)

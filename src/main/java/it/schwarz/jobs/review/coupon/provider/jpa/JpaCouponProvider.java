@@ -3,7 +3,12 @@ package it.schwarz.jobs.review.coupon.provider.jpa;
 import it.schwarz.jobs.review.coupon.domain.entity.AmountOfMoney;
 import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
 import it.schwarz.jobs.review.coupon.domain.entity.CouponApplications;
-import it.schwarz.jobs.review.coupon.domain.usecase.CouponProvider;
+import it.schwarz.jobs.review.coupon.provider.CouponProvider;
+import it.schwarz.jobs.review.coupon.provider.entity.ApplicationJpaEntity;
+import it.schwarz.jobs.review.coupon.provider.entity.CouponJpaEntity;
+import it.schwarz.jobs.review.coupon.provider.repository.ApplicationJpaRepository;
+import it.schwarz.jobs.review.coupon.provider.repository.CouponJpaRepository;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
@@ -53,7 +58,7 @@ public class JpaCouponProvider implements CouponProvider {
 
     @Override
     public Optional<CouponApplications> getCouponApplications(String couponCode) {
-        var found = couponJpaRepository.findById(couponCode);
+        var found = couponJpaRepository.findById(couponCode);  // Check do i need to check is found optional check
         return found.map(couponJpaEntity -> new CouponApplications(
                 couponJpaEntity.getCode(),
                 couponJpaEntity.getApplications().stream()

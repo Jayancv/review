@@ -1,5 +1,7 @@
 package it.schwarz.jobs.review.coupon.domain.entity;
 
+import java.util.Objects;
+
 public class Coupon {
 
     private final String code;
@@ -40,5 +42,21 @@ public class Coupon {
         return applicationCount;
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Coupon coupon = (Coupon) o;
+        return applicationCount == coupon.applicationCount && Objects.equals(code, coupon.code)
+            && Objects.equals(discount, coupon.discount) && Objects.equals(minBasketValue,
+            coupon.minBasketValue) && Objects.equals(description, coupon.description);
+    }
 
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(code, discount, minBasketValue, description, applicationCount);
+    }
 }

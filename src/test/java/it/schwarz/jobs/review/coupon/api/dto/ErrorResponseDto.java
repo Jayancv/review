@@ -1,4 +1,4 @@
-package it.schwarz.jobs.review.coupon.api;
+package it.schwarz.jobs.review.coupon.api.dto;
 
 public record ErrorResponseDto(
         String type,

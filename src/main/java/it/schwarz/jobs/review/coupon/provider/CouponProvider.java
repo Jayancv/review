@@ -1,4 +1,4 @@
-package it.schwarz.jobs.review.coupon.domain.usecase;
+package it.schwarz.jobs.review.coupon.provider;
 
 import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
 import it.schwarz.jobs.review.coupon.domain.entity.CouponApplications;

@@ -1,17 +1,26 @@
-package it.schwarz.jobs.review.coupon.domain.usecase;
+package it.schwarz.jobs.review.coupon.service;
 
 import it.schwarz.jobs.review.coupon.domain.entity.ApplicationResult;
 import it.schwarz.jobs.review.coupon.domain.entity.Basket;
 import it.schwarz.jobs.review.coupon.domain.entity.Coupon;
 import it.schwarz.jobs.review.coupon.domain.entity.CouponApplications;
+import it.schwarz.jobs.review.coupon.domain.usecase.exception.BasketValueTooLowException;
+import it.schwarz.jobs.review.coupon.domain.usecase.exception.CouponAlreadyExistsException;
+import it.schwarz.jobs.review.coupon.domain.usecase.exception.CouponCodeNotFoundException;
+import it.schwarz.jobs.review.coupon.provider.CouponProvider;
 
 import java.util.List;
 
-public class CouponUseCases {
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class CouponService
+{
 
     private final CouponProvider couponProvider;
 
-    public CouponUseCases(CouponProvider couponProvider) {
+    public CouponService(CouponProvider couponProvider) {
         this.couponProvider = couponProvider;
     }
 
@@ -29,12 +38,13 @@ public class CouponUseCases {
 
     public CouponApplications getApplications(String couponCode) {
         var foundCouponApplications = couponProvider.getCouponApplications(couponCode);
-        if (foundCouponApplications.isEmpty()) {
+        if (foundCouponApplications.isEmpty()) {   // Need 2 exceptions Coupon code missing or no applications
             throw new CouponCodeNotFoundException("Coupon-Code " + couponCode + " not found.");
         }
         return foundCouponApplications.get();
     }
 
+    @Transactional  // need to validate
     public ApplicationResult applyCoupon(Basket basket, String couponCode) {
 
         var basketValue = basket.getValue();
