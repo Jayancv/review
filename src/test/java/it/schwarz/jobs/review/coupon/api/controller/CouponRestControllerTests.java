@@ -137,7 +137,7 @@ class CouponRestControllerTests {
 
         mockMvc.perform(get(BASE_PATH + "/" + couponCode + "/applications"))
             .andDo(print())
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.detail").value(containsString("not found")));
     }
 
@@ -171,7 +171,7 @@ class CouponRestControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andDo(print())
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.detail").value(containsString("not found")));
     }
 

@@ -1,5 +1,7 @@
 package it.schwarz.jobs.review.coupon.api.handler;
 
+import java.time.Instant;
+
 import it.schwarz.jobs.review.coupon.domain.exception.BusinessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,11 +18,12 @@ public class CouponExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {BusinessException.class})
     protected ResponseEntity<Object> handleBusinessExceptions(BusinessException ex, WebRequest request) {
-        final var problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        HttpStatus status = ex.getStatus();
+        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
         problemDetail.setDetail(ex.getMessage());
-        // Can add different HTTP status for different business errors
-        return handleExceptionInternal(ex, problemDetail,
-                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("errorType", ex.getClass().getSimpleName());
+        return handleExceptionInternal(ex, problemDetail, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(value = {Exception.class})
