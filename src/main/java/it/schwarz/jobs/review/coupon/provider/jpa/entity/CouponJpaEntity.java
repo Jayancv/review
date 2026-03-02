@@ -19,7 +19,9 @@ public class CouponJpaEntity {
     private BigDecimal minBasketValue;
     @Column(name = "DESCRIPTION", nullable = false, length = 1000)
     private String description;
-    @OneToMany(mappedBy = "couponCode")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUPON_CODE", referencedColumnName = "CODE",
+        insertable = false, updatable = false)
     private List<ApplicationJpaEntity> applications;
 
     public CouponJpaEntity() {

@@ -15,8 +15,9 @@ public class ApplicationJpaEntity {
     private Long id;
 
     // Add one-to-many relation
-    @Column(name = "COUPON_CODE", nullable = false)
-    private String couponCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUPON_CODE", nullable = false)
+    private CouponJpaEntity coupon;
 
     @Column(name = "TIMESTAMP", nullable = false)
     private Instant timestamp;
@@ -25,8 +26,8 @@ public class ApplicationJpaEntity {
     public ApplicationJpaEntity() {
     }
 
-    public ApplicationJpaEntity(String code, Instant timestamp) {
-        this.couponCode = code;
+    public ApplicationJpaEntity(CouponJpaEntity code, Instant timestamp) {
+        this.coupon = code;
         this.timestamp = timestamp;
     }
 
@@ -34,8 +35,8 @@ public class ApplicationJpaEntity {
         return id;
     }
 
-    public String getCouponCode() {
-        return couponCode;
+    public CouponJpaEntity getCouponCode() {
+        return coupon;
     }
 
     public Instant getTimestamp() {

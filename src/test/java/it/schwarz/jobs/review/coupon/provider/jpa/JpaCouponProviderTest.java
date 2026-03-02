@@ -3,6 +3,8 @@ package it.schwarz.jobs.review.coupon.provider.jpa;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityManager;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ class JpaCouponProviderTest
 {
     @Autowired
     private CouponProvider couponProvider;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @BeforeEach
     void setUp() {
@@ -103,6 +108,9 @@ class JpaCouponProviderTest
 
         couponProvider.registerCouponApplication(coupon.getCode());
 
+        entityManager.flush();
+        entityManager.clear();
+
         Optional<CouponApplications> apps = couponProvider.getCouponApplications(coupon.getCode());
         assertThat(apps).isPresent();
         assertThat(apps.get().getApplicationTimestamps()).hasSize(1);
@@ -116,6 +124,9 @@ class JpaCouponProviderTest
         couponProvider.registerCouponApplication(coupon.getCode());
         couponProvider.registerCouponApplication(coupon.getCode());
 
+        entityManager.flush();
+        entityManager.clear();
+
         Optional<CouponApplications> apps = couponProvider.getCouponApplications(coupon.getCode());
         assertThat(apps).isPresent();
         assertThat(apps.get().getApplicationTimestamps()).hasSize(2);
@@ -126,6 +137,9 @@ class JpaCouponProviderTest
         Coupon coupon = TestObjects.coupons().COUPON_12_20();
         couponProvider.createCoupon(coupon);
         couponProvider.registerCouponApplication(coupon.getCode());
+
+        entityManager.flush();
+        entityManager.clear();
 
         Optional<CouponApplications> apps = couponProvider.getCouponApplications(coupon.getCode());
 
@@ -149,5 +163,33 @@ class JpaCouponProviderTest
 
         assertThat(apps).isPresent();
         assertThat(apps.get().getApplicationTimestamps()).isEmpty();
+    }
+
+    // Missing: applicationCount reflects registered applications in findAll/findById
+    @Test
+    void shouldReflectApplicationCountInFindAll() {
+        Coupon coupon = TestObjects.coupons().COUPON_12_20();
+        couponProvider.createCoupon(coupon);
+        couponProvider.registerCouponApplication(coupon.getCode());
+        couponProvider.registerCouponApplication(coupon.getCode());
+
+        entityManager.flush();
+        entityManager.clear();
+
+        List<Coupon> all = couponProvider.findAll();
+        assertThat(all.getFirst().getApplicationCount()).isEqualTo(2);
+    }
+
+    // Missing: reset clears both coupons and applications
+    @Test
+    void shouldResetClearAllData() {
+        couponProvider.createCoupon(TestObjects.coupons().COUPON_12_20());
+        couponProvider.registerCouponApplication(TestObjects.coupons().COUPON_12_20().getCode());
+
+        couponProvider.reset();
+
+        assertThat(couponProvider.findAll()).isEmpty();
+        assertThat(couponProvider.getCouponApplications(
+            TestObjects.coupons().COUPON_12_20().getCode())).isEmpty();
     }
 }

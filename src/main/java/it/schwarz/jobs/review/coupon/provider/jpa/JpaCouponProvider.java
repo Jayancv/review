@@ -45,9 +45,10 @@ public class JpaCouponProvider implements CouponProvider {
 
     @Override
     public void registerCouponApplication(String couponCode) {
-        applicationRepository.save(new ApplicationJpaEntity(
-                couponCode,
-                Instant.now()));
+        CouponJpaEntity coupon = couponJpaRepository.findById(couponCode)
+            .orElseThrow(() -> new IllegalStateException("Coupon not exists: " + couponCode));
+
+        applicationRepository.save(new ApplicationJpaEntity(coupon, Instant.now()));
     }
 
     @Override
@@ -60,7 +61,7 @@ public class JpaCouponProvider implements CouponProvider {
     public Optional<CouponApplications> getCouponApplications(String couponCode) {
         var found = couponJpaRepository.findById(couponCode);
         return found.map(couponJpaEntity -> {
-            List<Instant> timestamps = Optional.ofNullable(applicationRepository.findByCouponCode(couponCode))
+            List<Instant> timestamps = Optional.ofNullable( couponJpaEntity.getApplications())
                 .orElse(List.of())
                 .stream()
                 .map(ApplicationJpaEntity::getTimestamp)
@@ -92,7 +93,7 @@ public class JpaCouponProvider implements CouponProvider {
     @Override
     public void reset()
     {
-        couponJpaRepository.deleteAll();
         applicationRepository.deleteAll();
+        couponJpaRepository.deleteAll();
     }
 }
