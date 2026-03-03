@@ -9,6 +9,7 @@ import it.schwarz.jobs.review.coupon.provider.jpa.entity.CouponJpaEntity;
 import it.schwarz.jobs.review.coupon.provider.jpa.repository.ApplicationJpaRepository;
 import it.schwarz.jobs.review.coupon.provider.jpa.repository.CouponJpaRepository;
 
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
@@ -37,6 +38,7 @@ public class JpaCouponProvider implements CouponProvider {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Coupon> findAll() {
         return couponJpaRepository.findAll().stream()
                 .map(this::jpaToDomain)
@@ -44,6 +46,7 @@ public class JpaCouponProvider implements CouponProvider {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void registerCouponApplication(String couponCode) {
         CouponJpaEntity coupon = couponJpaRepository.findById(couponCode)
             .orElseThrow(() -> new IllegalStateException("Coupon not exists: " + couponCode));
@@ -52,12 +55,14 @@ public class JpaCouponProvider implements CouponProvider {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Coupon> findById(String couponCode) {
         var found = couponJpaRepository.findById(couponCode);
         return found.map(this::jpaToDomain);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<CouponApplications> getCouponApplications(String couponCode) {
         var found = couponJpaRepository.findById(couponCode);
         return found.map(couponJpaEntity -> {
@@ -68,6 +73,14 @@ public class JpaCouponProvider implements CouponProvider {
                 .toList();
             return new CouponApplications(couponJpaEntity.getCode(), timestamps);
         });
+    }
+
+    @Override
+    @Transactional
+    public void reset()
+    {
+        applicationRepository.deleteAll();
+        couponJpaRepository.deleteAll();
     }
 
     private CouponJpaEntity domainToJpa(Coupon coupon) {
@@ -90,10 +103,4 @@ public class JpaCouponProvider implements CouponProvider {
         );
     }
 
-    @Override
-    public void reset()
-    {
-        applicationRepository.deleteAll();
-        couponJpaRepository.deleteAll();
-    }
 }

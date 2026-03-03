@@ -24,6 +24,7 @@ public class CouponService
         this.couponProvider = couponProvider;
     }
 
+    @Transactional
     public Coupon createCoupon(Coupon coupon) {
         try {
             return couponProvider.createCoupon(coupon);
@@ -32,10 +33,12 @@ public class CouponService
         }
     }
 
+    @Transactional(readOnly = true)
     public List<Coupon> findAllCoupons() {
         return couponProvider.findAll();
     }
 
+    @Transactional(readOnly = true)
     public CouponApplications getApplications(String couponCode) {
         var foundCouponApplications = couponProvider.getCouponApplications(couponCode);
         if (foundCouponApplications.isEmpty()) {
