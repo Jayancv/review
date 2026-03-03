@@ -17,5 +17,8 @@ public interface CouponProvider {
 
     Optional<CouponApplications> getCouponApplications(String couponCode);
 
+    /**
+     * Resets the provider state. Intended for testing only.
+     */
     void reset();
 }

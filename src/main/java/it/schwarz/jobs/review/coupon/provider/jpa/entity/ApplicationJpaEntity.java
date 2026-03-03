@@ -14,7 +14,6 @@ public class ApplicationJpaEntity {
     @Column(name = "ID")
     private Long id;
 
-    // Add one-to-many relation
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COUPON_CODE", nullable = false)
     private CouponJpaEntity coupon;
@@ -35,7 +34,7 @@ public class ApplicationJpaEntity {
         return id;
     }
 
-    public CouponJpaEntity getCouponCode() {
+    public CouponJpaEntity getCoupon() {
         return coupon;
     }
 
