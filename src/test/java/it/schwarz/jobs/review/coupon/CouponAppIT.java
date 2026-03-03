@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "coupon.provider=inmem")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "coupon.provider=jpa")
 @ActiveProfiles(profiles = "dev")
 public class CouponAppIT {
 
@@ -63,7 +63,7 @@ public class CouponAppIT {
 
     @Test
     void testGetCouponOverview() {
-        // Arrange — create known state explicitly
+        // Arrange - create known state explicitly
         restTemplate.postForObject(baseUrl, TestObjects.requests().validCoupon(),
             CreateCouponResponseDto.class);
 
@@ -117,11 +117,11 @@ public class CouponAppIT {
 
     @Test
     void createCoupon_returnsConflict_whenCouponAlreadyExists() {
-        // Arrange — create it once first
+        // Arrange - create it once first
         restTemplate.postForEntity(baseUrl, TestObjects.requests().validCoupon(),
             CreateCouponResponseDto.class);
 
-        // Act — try to create it again
+        // Act - try to create it again
         ResponseEntity<ErrorResponseDto> response = restTemplate
             .postForEntity(baseUrl, TestObjects.requests().validCoupon(),
                 ErrorResponseDto.class);
@@ -171,7 +171,7 @@ public class CouponAppIT {
 
     @Test
     void applyCoupon_returnsDiscountedResult_whenRequestIsValid() {
-        // Arrange — coupon must exist first
+        // Arrange - coupon must exist first
         restTemplate.postForObject(baseUrl, TestObjects.requests().validCoupon(),
             CreateCouponResponseDto.class);
 
@@ -235,7 +235,7 @@ public class CouponAppIT {
 
     @Test
     void getCouponApplications_returnsTimestamps_whenCouponHasApplications() {
-        // Arrange — create coupon and apply it
+        // Arrange - create coupon and apply it
         restTemplate.postForObject(baseUrl, TestObjects.requests().validCoupon(),
             CreateCouponResponseDto.class);
         restTemplate.postForEntity(baseUrl + "/applications",
@@ -258,7 +258,7 @@ public class CouponAppIT {
 
     @Test
     void getCouponApplications_returnsEmptyList_whenCouponHasNoApplications() {
-        // Arrange — create coupon but never apply it
+        // Arrange - create coupon but never apply it
         restTemplate.postForObject(baseUrl, TestObjects.requests().validCoupon(),
             CreateCouponResponseDto.class);
 

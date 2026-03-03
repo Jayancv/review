@@ -10,11 +10,16 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * InMemory Implementation to simplify local test and development.
  * You can use this if there is no real database available.
  */
 public class InMemoryCouponProvider implements CouponProvider {
+
+    private static final Logger log = LoggerFactory.getLogger(InMemoryCouponProvider.class);
 
     private final Map<String, Coupon> coupons = new ConcurrentHashMap<>();
     private final Map<String, List<Instant>> couponApplications = new ConcurrentHashMap<>();
@@ -35,6 +40,8 @@ public class InMemoryCouponProvider implements CouponProvider {
             Instant.now().plusSeconds(3),
             Instant.now().plusSeconds(4)
         )));
+        log.info("In-Memory Provider initialized.");
+
     }
 
 

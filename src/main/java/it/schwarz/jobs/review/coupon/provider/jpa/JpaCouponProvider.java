@@ -9,6 +9,8 @@ import it.schwarz.jobs.review.coupon.provider.jpa.entity.CouponJpaEntity;
 import it.schwarz.jobs.review.coupon.provider.jpa.repository.ApplicationJpaRepository;
 import it.schwarz.jobs.review.coupon.provider.jpa.repository.CouponJpaRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,18 +20,22 @@ import java.util.Optional;
 
 public class JpaCouponProvider implements CouponProvider {
 
+    private static final Logger log = LoggerFactory.getLogger(JpaCouponProvider.class);
+
     private final CouponJpaRepository couponJpaRepository;
     private final ApplicationJpaRepository applicationRepository;
 
     public JpaCouponProvider(CouponJpaRepository couponJpaRepository, ApplicationJpaRepository applicationRepository) {
         this.couponJpaRepository = couponJpaRepository;
         this.applicationRepository = applicationRepository;
+        log.info("JPA Provider initialized.");
     }
 
     @Override
     @Transactional
     public Coupon createCoupon(Coupon coupon) {
         if (couponJpaRepository.existsById(coupon.getCode())) {
+            log.debug("Coupon already exists in DB code={}", coupon.getCode());
             throw new IllegalStateException("Coupon already exists: " + coupon.getCode());
         }
         var toPersist = domainToJpa(coupon);
@@ -79,8 +85,10 @@ public class JpaCouponProvider implements CouponProvider {
     @Transactional
     public void reset()
     {
+        log.warn("Resetting all coupon data - this should only happen in non-production");
         applicationRepository.deleteAll();
         couponJpaRepository.deleteAll();
+        log.warn("All coupon data deleted");
     }
 
     private CouponJpaEntity domainToJpa(Coupon coupon) {

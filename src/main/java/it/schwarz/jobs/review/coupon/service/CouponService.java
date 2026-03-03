@@ -11,12 +11,15 @@ import it.schwarz.jobs.review.coupon.provider.CouponProvider;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CouponService
 {
+    private static final Logger log = LoggerFactory.getLogger(CouponService.class);
 
     private final CouponProvider couponProvider;
 
@@ -29,6 +32,7 @@ public class CouponService
         try {
             return couponProvider.createCoupon(coupon);
         } catch (IllegalStateException ex) {
+            log.warn("Coupon creation failed - already exists code={}", coupon.getCode());
             throw new CouponAlreadyExistsException(ex.getMessage());
         }
     }
@@ -42,6 +46,7 @@ public class CouponService
     public CouponApplications getApplications(String couponCode) {
         var foundCouponApplications = couponProvider.getCouponApplications(couponCode);
         if (foundCouponApplications.isEmpty()) {
+            log.warn("Applications lookup failed - coupon not found code={}", couponCode);
             throw new CouponCodeNotFoundException("Coupon-Code " + couponCode + " not found.");
         }
         return foundCouponApplications.get();
@@ -55,18 +60,23 @@ public class CouponService
 
         // No Coupon found for given Coupon Code
         if (foundCoupon.isEmpty()) {
+            log.warn("Coupon application failed - coupon not found code={}", couponCode);
             throw new CouponCodeNotFoundException("Coupon-Code " + couponCode + " not found.");
         }
 
         // Basket value must not be less than discount
         var couponToApply = foundCoupon.get();
         if (basketValue.isLessThan(couponToApply.getDiscount())) {
+            log.warn("Coupon application failed - basket value {} less than discount {}couponCode={}",
+                basket.getValue().toBigDecimal(), couponToApply.getDiscount().toBigDecimal(), couponCode);
             throw new BasketValueTooLowException(
                     "The basket value (" + basketValue.toBigDecimal() + ") must not be less than the discount (" + couponToApply.getDiscount().toBigDecimal() + ").");
         }
 
         // Basket value must not be less than Coupon's minimal Basket Value
         if (basketValue.isLessThan(couponToApply.getMinBasketValue())) {
+            log.warn("Coupon application failed - basket value {} less than minBasketValue {} couponCode={}",
+                basket.getValue().toBigDecimal(), couponToApply.getMinBasketValue().toBigDecimal(), couponCode);
             throw new BasketValueTooLowException(
                     "The basket value (" + basketValue.toBigDecimal() + ") must not be less than the min. allowed basket value (" + couponToApply.getMinBasketValue().toBigDecimal() + ").");
         }
@@ -74,7 +84,9 @@ public class CouponService
         // Register the usage of this coupon
         couponProvider.registerCouponApplication(couponToApply.getCode());
 
-        // Apply
+        log.info("Coupon applied successfully couponCode={} discount={} basketValue={}",
+            couponCode, couponToApply.getDiscount().toBigDecimal(), basket.getValue().toBigDecimal());
+
         return new ApplicationResult(basket, couponToApply);
     }
 
