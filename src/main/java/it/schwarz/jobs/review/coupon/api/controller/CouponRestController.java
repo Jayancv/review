@@ -8,6 +8,7 @@ import it.schwarz.jobs.review.coupon.api.dto.response.GetCouponApplicationsRespo
 import it.schwarz.jobs.review.coupon.api.dto.response.GetCouponsResponseDto;
 import it.schwarz.jobs.review.coupon.service.CouponService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,7 @@ public class CouponRestController {
 
     // @NotBlank(message = "Coupon code must not be blank")
     @GetMapping("/{couponCode}/applications")
-    public ResponseEntity<GetCouponApplicationsResponseDto> getCouponApplications(@PathVariable("couponCode") String couponCode) {
+    public ResponseEntity<GetCouponApplicationsResponseDto> getCouponApplications(@PathVariable("couponCode") @NotBlank String couponCode) {
         log.debug("REST GET /api/v1/coupons/{}/applications - fetching applications", couponCode);
         var couponApplications = couponService.getApplications(couponCode);
 
