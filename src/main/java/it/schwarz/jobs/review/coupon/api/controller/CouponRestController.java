@@ -23,6 +23,8 @@ public class CouponRestController {
 
     private static final Logger log = LoggerFactory.getLogger(CouponRestController.class);
 
+    public static final String PATH = "/api/v1/coupons";
+
     private final CouponService couponService;
 
     public CouponRestController(CouponService couponService) {
@@ -32,21 +34,21 @@ public class CouponRestController {
 
     @GetMapping()  // Can paginate
     public ResponseEntity<GetCouponsResponseDto> getCoupons() {
-        log.debug("REST GET /api/v1/coupons - fetching all coupons");
+        log.debug("REST GET {} - fetching all coupons", PATH);
 
         var coupons = couponService.findAllCoupons();
 
         // Map from Domain to API
         var response = GetCouponsResponseDto.of(coupons);
 
-        log.debug("REST GET /api/v1/coupons - returning {} coupons", coupons.size());
+        log.debug("REST GET {} - returning {} coupons", PATH, coupons.size());
         return ResponseEntity.ok(response);
     }
 
 
     @PostMapping()
     public ResponseEntity<CreateCouponResponseDto> createCoupon(@Valid @RequestBody CreateCouponRequestDto request) {
-        log.info("REST POST /api/v1/coupons - creating coupon with code={}", request.code());
+        log.info("REST POST {} - creating coupon with code={}", PATH, request.code());
         // Map from API to Domain
         var coupon = request.toCoupon();
 
@@ -54,19 +56,19 @@ public class CouponRestController {
 
         // Map from Domain to API and return
         var response = CreateCouponResponseDto.of(couponCreated);
-        log.info("REST POST /api/v1/coupons - coupon created successfully code={}", couponCreated.getCode());
+        log.info("REST POST {} - coupon created successfully code={}", PATH, couponCreated.getCode());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // @NotBlank(message = "Coupon code must not be blank")
     @GetMapping("/{couponCode}/applications")
     public ResponseEntity<GetCouponApplicationsResponseDto> getCouponApplications(@PathVariable("couponCode") @NotBlank String couponCode) {
-        log.debug("REST GET /api/v1/coupons/{}/applications - fetching applications", couponCode);
+        log.debug("REST GET {}/{}/applications - fetching applications", PATH, couponCode);
         var couponApplications = couponService.getApplications(couponCode);
 
         // Map from Domain to API
         var response = GetCouponApplicationsResponseDto.of(couponApplications);
-        log.debug("REST GET /api/v1/coupons/{}/applications - found {} applications", couponCode,
+        log.debug("REST GET {}/{}/applications - found {} applications", PATH, couponCode,
             couponApplications.getApplicationTimestamps().size());
         return ResponseEntity.ok(response);
     }
@@ -74,7 +76,7 @@ public class CouponRestController {
 
     @PostMapping("/applications")  // can add coupon no as path parameter
     public ResponseEntity<ApplyCouponResponseDto> applyCoupon(@Valid @RequestBody ApplyCouponRequestDto request) {
-        log.info("REST POST /api/v1/coupons/applications - applying couponCode={} basketValue={}",
+        log.info("REST POST {}/applications - applying couponCode={} basketValue={}", PATH,
             request.couponCode(), request.basket().value());
         // Map from API to Domain
         var basket = request.basket().toBasket();
@@ -84,7 +86,7 @@ public class CouponRestController {
 
         // Map from Domain to API and return
         var response = ApplyCouponResponseDto.of(applicationResult);
-        log.info("REST POST /api/v1/coupons/applications - coupon applied successfully couponCode={} discount={}",
+        log.info("REST POST {}/applications - coupon applied successfully couponCode={} discount={}", PATH,
             request.couponCode(),
             applicationResult.getAppliedCoupon().getDiscount().toBigDecimal());
         return ResponseEntity.ok(response);
