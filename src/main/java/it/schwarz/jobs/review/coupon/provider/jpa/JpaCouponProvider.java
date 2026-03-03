@@ -11,8 +11,6 @@ import it.schwarz.jobs.review.coupon.provider.jpa.repository.CouponJpaRepository
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -32,7 +30,6 @@ public class JpaCouponProvider implements CouponProvider {
     }
 
     @Override
-    @Transactional
     public Coupon createCoupon(Coupon coupon) {
         if (couponJpaRepository.existsById(coupon.getCode())) {
             log.debug("Coupon already exists in DB code={}", coupon.getCode());
@@ -44,7 +41,6 @@ public class JpaCouponProvider implements CouponProvider {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Coupon> findAll() {
         return couponJpaRepository.findAll().stream()
                 .map(this::jpaToDomain)
@@ -52,7 +48,6 @@ public class JpaCouponProvider implements CouponProvider {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
     public void registerCouponApplication(String couponCode) {
         CouponJpaEntity coupon = couponJpaRepository.findById(couponCode)
             .orElseThrow(() -> new IllegalStateException("Coupon not exists: " + couponCode));
@@ -61,14 +56,12 @@ public class JpaCouponProvider implements CouponProvider {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Coupon> findById(String couponCode) {
         var found = couponJpaRepository.findById(couponCode);
         return found.map(this::jpaToDomain);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<CouponApplications> getCouponApplications(String couponCode) {
         var found = couponJpaRepository.findById(couponCode);
         return found.map(couponJpaEntity -> {
@@ -82,7 +75,6 @@ public class JpaCouponProvider implements CouponProvider {
     }
 
     @Override
-    @Transactional
     public void reset()
     {
         log.warn("Resetting all coupon data - this should only happen in non-production");
