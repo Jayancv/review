@@ -71,6 +71,11 @@ class AmountOfMoneyTests {
     }
 
     @Test
+    void testEqualityPrecision() {
+        assertThat(AmountOfMoney.of("1.20")).isEqualTo(AmountOfMoney.of("1.2"));
+    }
+
+    @Test
     void testScaleInsensitiveComparison() {
         assertFalse(AmountOfMoney.of("1.20").isLessThan(AmountOfMoney.of("1.2")));
         assertFalse(AmountOfMoney.of("1.20").isGreaterThan(AmountOfMoney.of("1.2")));

@@ -38,7 +38,7 @@ public class AmountOfMoney {
             return false;
         }
         AmountOfMoney that = (AmountOfMoney) o;
-        return Objects.equals(amount, that.amount);
+        return amount.compareTo(that.amount) == 0;
     }
 
     @Override
