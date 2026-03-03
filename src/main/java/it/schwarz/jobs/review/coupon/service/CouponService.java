@@ -1,5 +1,6 @@
 package it.schwarz.jobs.review.coupon.service;
 
+import it.schwarz.jobs.review.coupon.domain.exception.InvalidCouponException;
 import it.schwarz.jobs.review.coupon.domain.model.ApplicationResult;
 import it.schwarz.jobs.review.coupon.domain.model.Basket;
 import it.schwarz.jobs.review.coupon.domain.model.Coupon;
@@ -29,6 +30,14 @@ public class CouponService
 
     @Transactional
     public Coupon createCoupon(Coupon coupon) {
+        if (coupon.getDiscount() == null || coupon.getMinBasketValue() == null) {
+            throw new InvalidCouponException("Discount and minBasketValue must not be null");
+        }
+        if (coupon.getDiscount().isGreaterThan(coupon.getMinBasketValue())) {
+            throw new InvalidCouponException(
+                "Discount (" + coupon.getDiscount().toBigDecimal() +
+                    ") must not exceed minBasketValue (" + coupon.getMinBasketValue().toBigDecimal() + ")");
+        }
         try {
             return couponProvider.createCoupon(coupon);
         } catch (IllegalStateException ex) {
