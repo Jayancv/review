@@ -22,7 +22,11 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "coupon.provider=jpa")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = {
+        "coupon.provider=jpa",
+        "coupon.init-data=false"
+    })
 @ActiveProfiles(profiles = "dev")
 public class CouponAppIT {
 

@@ -25,7 +25,10 @@ public class InMemoryCouponProvider implements CouponProvider {
     private final Map<String, List<Instant>> couponApplications = new ConcurrentHashMap<>();
 
     public InMemoryCouponProvider() {
-        // Test Coupons
+            log.info("In-Memory Provider initialized.");
+    }
+
+    public InMemoryCouponProvider withTestData(){
         Coupon c1 = new Coupon("TEST_05_50", AmountOfMoney.of("5.00"), AmountOfMoney.of("50.00"), "5 for 50");
         Coupon c2 = new Coupon("TEST_15_100", AmountOfMoney.of("15.00"), AmountOfMoney.of("100.00"), "15 for 100");
         Coupon c3 = new Coupon("TEST_40_200", AmountOfMoney.of("40.00"), AmountOfMoney.of("200.00"), "40 for 200");
@@ -33,54 +36,59 @@ public class InMemoryCouponProvider implements CouponProvider {
         coupons.put(c2.getCode(), c2);
         coupons.put(c3.getCode(), c3);
 
-        // Test DateTimes
         couponApplications.put("TEST_05_50", new CopyOnWriteArrayList<>(List.of(
             Instant.now().plusSeconds(1),
             Instant.now().plusSeconds(2),
             Instant.now().plusSeconds(3),
             Instant.now().plusSeconds(4)
         )));
-        log.info("In-Memory Provider initialized.");
-
+        log.info("Test data loaded.");
+        return this;
     }
 
-
     @Override
-    public Coupon createCoupon(Coupon coupon) {
-        // Coupon must not already exist
-        var foundCoupon = this.findById(coupon.getCode());
-        if (foundCoupon.isPresent()) {
+    public Coupon createCoupon(Coupon coupon){
+        var existing = coupons.putIfAbsent(coupon.getCode(), coupon);
+        if (existing != null) {
+            log.debug("Coupon already exists code={}", coupon.getCode());
             throw new IllegalStateException("Coupon already exists: " + coupon.getCode());
         }
-
-        coupons.put(coupon.getCode(), coupon);
+        log.debug("Coupon created code={}", coupon.getCode());
         return coupon;
     }
 
     @Override
     public List<Coupon> findAll() {
         return coupons.values().stream()
-            .map(c -> new Coupon(
-                c.getCode(),
-                c.getDiscount(),
-                c.getMinBasketValue(),
-                c.getDescription(),
-                couponApplications.getOrDefault(c.getCode(), List.of()).size()
-            ))
+            .map(this::withApplicationCount)
             .toList();
-        // This needed to be done due to coupon apply method not implemented
     }
 
     @Override
     public Optional<Coupon> findById(String couponCode) {
-        return Optional.ofNullable(coupons.get(couponCode));
+        return Optional.ofNullable(coupons.get(couponCode))
+            .map(this::withApplicationCount);
+    }
+
+    private Coupon withApplicationCount(Coupon c) {
+        return new Coupon(
+            c.getCode(),
+            c.getDiscount(),
+            c.getMinBasketValue(),
+            c.getDescription(),
+            couponApplications.getOrDefault(c.getCode(), List.of()).size()
+        );
     }
 
     @Override
     public void registerCouponApplication(String couponCode) {
         // Intentionally left blank, because it is currently not used
+//        if (!coupons.containsKey(couponCode)) {
+//            throw new IllegalStateException("Coupon not found: " + couponCode);
+//        }
 //        couponApplications.computeIfAbsent(couponCode, k -> new CopyOnWriteArrayList<>())
 //            .add(Instant.now());
+//        log.debug("Registered application for couponCode={}", couponCode);
     }
 
     @Override

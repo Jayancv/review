@@ -95,7 +95,7 @@ public class InMemoryCouponProviderTest
 
     @Test
     void shouldGetCouponApplicationsForExistingCoupon() {
-        InMemoryCouponProvider providerWithData = new InMemoryCouponProvider();
+        InMemoryCouponProvider providerWithData = new InMemoryCouponProvider().withTestData();
         Optional<CouponApplications> apps = providerWithData.getCouponApplications("TEST_05_50");
 
         assertThat(apps).isPresent();

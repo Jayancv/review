@@ -6,6 +6,7 @@ import it.schwarz.jobs.review.coupon.provider.jpa.repository.ApplicationJpaRepos
 import it.schwarz.jobs.review.coupon.provider.jpa.repository.CouponJpaRepository;
 import it.schwarz.jobs.review.coupon.provider.jpa.JpaCouponProvider;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,17 +25,15 @@ public class CouponAppConfig {
 
     // Comment in/out one of the CouponProvider Beans to select one for runtime
      @Bean
-     @ConditionalOnProperty(name = "coupon.provider", havingValue = "inmem", matchIfMissing = false)
+     @ConditionalOnProperty(name = "coupon.provider", havingValue = "inmem")
      @Profile("dev")
-    public CouponProvider getInMemCouponProvider() {
-        return new InMemoryCouponProvider();
-    }
-
-//    removed by adding @service annotation
-//    @Bean
-//    public CouponService getCouponUseCases(CouponProvider couponProvider) {
-//        return new CouponService(couponProvider);
-//    }
-//
+     public CouponProvider getInMemCouponProvider(
+         @Value("${coupon.init-data:false}") boolean initData) {
+         InMemoryCouponProvider provider = new InMemoryCouponProvider();
+         if (initData) {
+             provider.withTestData();
+         }
+         return provider;
+     }
 
 }
